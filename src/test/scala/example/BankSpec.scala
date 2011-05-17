@@ -1,28 +1,29 @@
+package example
+
 import org.scalatest.Spec
-import org.scalatest.matchers.MustMatchers
+import org.scalatest.junit.ShouldMatchersForJUnit
+import org.scalatest.junit.JUnitRunner
+import org.junit.runner.RunWith
 
-import example.Bank
-
-class BankSpec extends Spec with MustMatchers {
-  describe("simple bank") {
-    val bank = new Bank
-
-    it("should start with zero balance") {
-      bank.balance must be (0.0)
+@RunWith(classOf[JUnitRunner])
+class BankSpec extends Spec with ShouldMatchersForJUnit {
+  describe("A Bank") {
+    describe("(when new)") {
+      val bank = new Bank
+      it("should have balance 0") {
+        bank.balance should be(0)
+      }
     }
-
-    it("should allow deposits") {
-      bank.deposit(100.0)
-      bank.balance must be (100.0) 
-    }
-
-    it("should allow withdrawals") {
-      bank.withdraw(50.0)
-      bank.balance must be (50.0)
-    }
-
-    it("should not allow account to be overdrawn") {
-      evaluating { bank.withdraw(60.0) } must produce [IllegalArgumentException]
+    describe("after deposit of 100") {
+      val bank = new Bank
+      bank.deposit(100)
+      it("should have a balance of 100") {
+        bank.balance should be(100)
+      }
+      it("should be 0 after withdraw of 100") {
+        bank.withdraw(100)
+        bank.balance should be(0)        
+      }
     }
   }
 }
